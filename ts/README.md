@@ -1,6 +1,6 @@
 # XRPLD Publisher
 
-The XRPLD Publisher is a Python library that provides functionality for managing and publishing XRPL validator lists (VLs). It includes a client for interacting with the XRPLD Publisher API and a client for managing validator keys and generating VL manifests.
+The XRPLD Publisher is a JavaScript/TypeScript library that provides functionality for managing and publishing XRPL validator lists (VLs). It includes a client for interacting with the XRPLD Publisher API and a client for managing validator keys and generating VL manifests.
 
 ## Installation
 
