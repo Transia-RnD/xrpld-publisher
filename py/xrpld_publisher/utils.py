@@ -4,9 +4,8 @@
 import base64
 import json
 from typing import Dict, Any  # noqa: F401
-import yaml
-import time
 from datetime import datetime
+import requests
 
 rippled_ts: int = 946684800
 
@@ -81,11 +80,7 @@ def write_json(data: Dict[str, object], path: str):
     return True
 
 
-import requests
-import json
-
-
-def downloadUNL(url):
+def download_unl(url):
     response = requests.get(url)
 
     # Check if the request was successful
