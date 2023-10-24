@@ -81,15 +81,15 @@ def write_json(data: Dict[str, object], path: str):
     return True
 
 
-def read_yaml(path: str) -> Dict[str, object]:
-    """Read Yaml
+import requests
+import json
 
-     # noqa: E501
 
-    :param path: Path to json
-    :type path: str
+def downloadUNL(url):
+    response = requests.get(url)
 
-    :rtype: Dict[str, object]
-    """
-    with open(path) as yaml_file:
-        return yaml.safe_load(yaml_file)
+    # Check if the request was successful
+    if response.status_code != 200:
+        raise Exception(f"HTTP error! status: {response.status_code}")
+
+    write_json(response.json(), "vl.json")

@@ -81,7 +81,9 @@ class PublisherClient(object):
 
         cls.vl.blob.validators = validators
 
-    def sign_unl(cls, pk: int, effective: str = None, expiration: int = None):
+    def sign_unl(
+        cls, pk: int, path: str, effective: str = None, expiration: int = None
+    ):
         if not cls.vl:
             raise ValueError("invalid vl")
 
@@ -94,7 +96,7 @@ class PublisherClient(object):
         if not expiration:
             expiration: int = from_days_to_expiration(time.time(), 30)
 
-        out = open(cls.vl_path, "w")
+        out = open(path, "w")
         vl_manifests: List[str] = [v.manifest for v in cls.vl.blob.validators]
         args = [
             cls.bin_path,
@@ -111,4 +113,4 @@ class PublisherClient(object):
             ",".join(vl_manifests),
         ]
         subprocess.call(args, stdout=out)
-        return read_txt(cls.vl_path)
+        return read_txt(path)

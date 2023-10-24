@@ -12,13 +12,16 @@ pip install xrpld-publisher
 
 ## Usage
 
-### Download the binary builds 
+### Download the First we need to download the binary builds for both the `validators-list` and `validator-keys`.
+ builds
 
 First we need to download the binary builds for both the `validators-list` and `validator-keys`.
 
-Download both of them and save them into the root of your project under `bin`.
+Download the build folder that corresponds to your operating system.
 
-> They will be located in the root directory of this project or in the newest release.
+> If you don't see your operating system you will need to build them yourself.
+
+Save them into the root of your project under the `bin` directory.
 
 ### Generate Publisher List Keys
 
@@ -43,9 +46,10 @@ Sample output:
 Keep the key files in a secure but recoverable location, such as an encrypted
 USB flash drive. Do not modify its contents.
 
-Use ephkey1.txt key and manifest to generate validator lists.
+Use ephkey1.txt key and manifest to generates validator lists.
 
 * Add the hex-encoded public key from your [pubkeys.txt file](#validator-list-publisher-keys) to `[validator_list_keys]`
+
 
 ### Validator Client
 
@@ -96,8 +100,8 @@ client.remove_validator("public_key")
 
 # Sign the VL with a private key and generate a signed VL
 effective: int = from_date_to_effective("01/01/2022")
-expiration: int = from_days_to_expiration(30)
-signed_vl = client.sign_unl("private_key", effective=effective, expiration=expiration)
+expiration: int = from_days_to_expiration(time.time(), 30)
+signed_vl = client.sign_unl("private_key", "myvl.json", effective=effective, expiration=expiration)
 ```
 
 The VL file is stored in the `vl_path` directory.
