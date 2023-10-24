@@ -12,14 +12,13 @@ pip install xrpld-publisher
 
 ## Usage
 
-### Download the First we need to download the binary builds for both the `validators-list` and `validator-keys`.
- builds
+### Download the binary builds
 
 First we need to download the binary builds for both the `validators-list` and `validator-keys`.
 
-Download the build folder that corresponds to your operating system.
+Download the build folder that corresponds to your operating system from [releases].(https://github.com/Transia-RnD/xrpld-publisher/releases)
 
-> If you don't see your operating system you will need to build them yourself.
+> If you don't see your operating system you will need to build them yourself for [source](https://github.com/Transia-RnD/validator-list). You can use this [guide](https://github.com/Transia-RnD/validator-list/blob/main/doc/validator-list-guide.md)
 
 Save them into the root of your project under the `bin` directory.
 
