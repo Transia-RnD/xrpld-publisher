@@ -83,9 +83,10 @@ export class PublisherClient {
 
   public signUnl(
     pk: string,
-    effective: number = null,
-    expiration: number = null
+    path: string,
+    options: { effective?: number; expiration?: number } = {}
   ): string {
+    let { effective, expiration } = options
     if (!this.vl) {
       throw new Error('Invalid VL')
     }
@@ -119,8 +120,8 @@ export class PublisherClient {
       '--manifests',
       vlManifests.join(','),
     ]
-    fs.writeFileSync(this.vlPath, '')
-    const out = fs.openSync(this.vlPath, 'w')
+    fs.writeFileSync(path, '')
+    const out = fs.openSync(path, 'w')
     const result = child_process.spawnSync(args[0], args.slice(1), {
       stdio: ['ignore', out, 'ignore'],
     })
@@ -128,7 +129,7 @@ export class PublisherClient {
       throw result.error
     }
 
-    const vlJson = fs.readFileSync(this.vlPath, 'utf8')
+    const vlJson = fs.readFileSync(path, 'utf8')
     return vlJson
   }
 }

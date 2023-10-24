@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import axios from 'axios'
 
 const rippledTs = 946684800
 
@@ -40,4 +41,15 @@ export function readJson(path: string): object {
 export function writeJson(data: object, path: string): boolean {
   fs.writeFileSync(path, JSON.stringify(data))
   return true
+}
+
+export async function downloadUNL(url: string): Promise<any> {
+  const response = await axios.get(url)
+
+  // Check if the request was successful
+  if (response.status !== 200) {
+    throw new Error(`HTTP error! status: ${response.status}`)
+  }
+
+  writeJson(response.data, 'vl.json')
 }
