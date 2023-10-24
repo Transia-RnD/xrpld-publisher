@@ -14,7 +14,7 @@ yarn add @transia/xrpld-publisher
 
 ### Download the binary builds
 
-First we need to download the bianry builds for both the `validators-list` and `validator-keys`.
+First we need to download the binary builds for both the `validators-list` and `validator-keys`.
 
 Download the build folder that corresponds to your operating system.
 
@@ -99,7 +99,7 @@ client.removeValidator("public_key")
 // Sign the VL with a private key and generate a signed VL
 const effective: number = fromDateToEffective("01/01/2022")
 const expiration: number = fromDaysToExpiration(Date.now(), 30)
-client.signUnl("private_key", "myvl.json", {effective, expiration })
+client.signUnl("private_key", "myvl.json", { effective, expiration })
 ```
 
 The VL file is stored in the `vl_path` directory.
