@@ -14,7 +14,7 @@
   },
   "license": "ISC",
   "dependencies": {
-    "@transia/xrpld-publisher": "^1.0.1"
+    "@transia/xrpld-publisher": "^1.0.2"
   },
   "devDependencies": {
     "@tsconfig/node16": "^1.0.3",

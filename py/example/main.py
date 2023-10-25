@@ -1,6 +1,9 @@
 from xrpld_publisher.publisher import PublisherClient
 from xrpld_publisher.utils import from_days_to_expiration, download_unl
 import time
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 def main():

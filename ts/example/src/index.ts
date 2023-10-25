@@ -3,6 +3,7 @@ import {
   downloadUNL,
   fromDaysToExpiration,
 } from '@transia/xrpld-publisher'
+import 'dotenv/config'
 
 export async function main(): Promise<void> {
   try {
