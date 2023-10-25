@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "xrpld-publisher"
-version = "1.0.3"
+version = "1.0.4"
 description = "Xrpld validator lists publisher library"
 authors = ["Denis Angell <dangell@transia.co>"]
 
@@ -10,6 +10,7 @@ pytest = "^7.2.1"
 PyYAML = "^6.0"
 xrpl-py = "^2.4.0"
 requests = "^2.31.0"
+python-dotenv = "^1.0.0"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.8.4"

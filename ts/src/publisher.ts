@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import path from 'path'
 import child_process from 'child_process'
+import 'dotenv/config'
 
 import { decodeBlob, fromDateToEffective, fromDaysToExpiration } from './utils'
 import { VL, Blob } from './types'
@@ -12,7 +13,6 @@ export class PublisherClient {
   vl: VL
 
   constructor(manifest: string = null, vlPath: string = null) {
-    this.binPath = path.join(process.cwd(), 'bin/validator-list')
     if (vlPath) {
       try {
         this.vlPath = vlPath
@@ -107,7 +107,7 @@ export class PublisherClient {
       (validator: any) => validator.manifest
     )
     const args = [
-      this.binPath,
+      process.env.BIN_PATH,
       'sign',
       '--private_key',
       pk.toString(),

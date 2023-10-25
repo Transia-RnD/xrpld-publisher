@@ -8,6 +8,9 @@ import subprocess
 import time
 from datetime import datetime
 from basedir import basedir
+from dotenv import load_dotenv
+
+load_dotenv()
 
 from xrpl.core.binarycodec.main import decode
 from xrpld_publisher.utils import (
@@ -24,7 +27,6 @@ class PublisherClient(object):
     vl: VL = None
 
     def __init__(cls, manifest: str = None, vl_path: str = None) -> None:
-        cls.bin_path: str = os.path.join(basedir, "bin/validator-list")
         if vl_path:
             try:
                 cls.vl_path = vl_path
@@ -99,7 +101,7 @@ class PublisherClient(object):
         out = open(path, "w")
         vl_manifests: List[str] = [v.manifest for v in cls.vl.blob.validators]
         args = [
-            cls.bin_path,
+            os.getenv("BIN_PATH"),
             "sign",
             "--private_key",
             pk,
