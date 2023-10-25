@@ -28,7 +28,7 @@ When first setting up a validator list, use the `validator-list` tool to
 generate the publisher key pair:
 
 ```
-  $ ./bin/validator-list
+  $ ./bin/validator-list wizard
 ```
 
 1. Enter `1` for `Create validator list publisher keys`
@@ -36,10 +36,10 @@ generate the publisher key pair:
 
 Sample output:
 ```
-  Select a name for this credential set: my-publisher-keys
+  Select a name for this credential set: keystore
 
   Publisher keys stored in privkeys.txt and pubkeys.txt
-  Ephemeral keys stored in my-publisher-keys/
+  Ephemeral keys stored in keystore/
 ```
 
 Keep the key files in a secure but recoverable location, such as an encrypted

@@ -6,3 +6,7 @@ node_modules
 yarn-error.log
 bin
 myvl.json
+
+keystore
+privkeys.txt
+pubkeys.txt
