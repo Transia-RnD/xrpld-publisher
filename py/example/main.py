@@ -18,7 +18,7 @@ def main():
         remove_list = [
             "EDE8FA88589CF8825334609E97EC8BFA1F56FF95D9D75BBD29996416D41319BF20",
         ]
-        old_unl = PublisherClient("vl.json")
+        old_unl = PublisherClient(vl_path="vl.json")
         validators = [
             validator
             for validator in old_unl.vl.blob.validators
