@@ -9,6 +9,7 @@ __pycache__/
 dist
 bin
 myvl.json
+publisher-keystore
 keystore
 privkeys.txt
 pubkeys.txt
