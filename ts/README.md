@@ -98,7 +98,7 @@ client.removeValidator("public_key")
 
 // Sign the VL with a private key and generate a signed VL
 const effective: number = fromDateToEffective("01/01/2022")
-const expiration: number = fromDaysToExpiration(Date.now(), 30)
+const expiration: number = fromDaysToExpiration(effective, 30) // Days
 client.signUnl("private_key", "myvl.json", { effective, expiration })
 ```
 
