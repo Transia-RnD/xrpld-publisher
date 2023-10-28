@@ -46,7 +46,21 @@ class ValidatorClient(object):
         out = open(token_path, "w")
         args = [cls.bin_path, "create_token", "--keyfile", cls.key_path]
         subprocess.call(args, stdout=out)
-        return read_txt(token_path)
+        return cls.read_token()
+
+    def read_token(cls) -> str:
+        token_path = os.path.join(cls.keystore_path, f"{cls.name}/token.txt")
+        with open(token_path, "r") as file:
+            lines = file.readlines()
+            start = False
+            token = ""
+            for line in lines:
+                if "[validator_token]" in line:
+                    start = True
+                    continue
+                if start:
+                    token += line.strip()
+        return token
 
     def create_manifest(cls) -> str:
         manifest_path = os.path.join(cls.keystore_path, f"{cls.name}/manifest.txt")
@@ -59,7 +73,7 @@ class ValidatorClient(object):
             cls.key_path,
         ]
         subprocess.call(args, stdout=out)
-        return read_txt(manifest_path)
+        return cls.read_manifest()
 
     def read_manifest(cls) -> str:
         manifest_path = os.path.join(cls.keystore_path, f"{cls.name}/manifest.txt")

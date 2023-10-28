@@ -58,6 +58,24 @@ export class ValidatorClient {
     return readTxt(token_path)
   }
 
+  readToken(): string {
+    const tokenPath = path.join(this.keystorePath, `${this.name}/token.txt`)
+    const data = fs.readFileSync(tokenPath, 'utf8')
+    const lines = data.split('\n')
+    let start = false
+    let token = ''
+    for (const line of lines) {
+      if (line.includes('[validator_token]')) {
+        start = true
+        continue
+      }
+      if (start) {
+        token += line.trim()
+      }
+    }
+    return token
+  }
+
   async createManifest(): Promise<string> {
     const manifest_path = path.join(
       this.keystorePath,
@@ -73,8 +91,7 @@ export class ValidatorClient {
     ]
     execSync(args.join(' '), { stdio: [0, out, 2] }) // Redirect stdout to 'out'
     fs.closeSync(out)
-    // @ts-expect-error -- ingonre
-    return readTxt(manifest_path)
+    return this.readManifest()
   }
 
   readManifest(): string {
