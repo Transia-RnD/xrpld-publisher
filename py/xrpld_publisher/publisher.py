@@ -7,7 +7,6 @@ from typing import Dict, Any, List  # noqa: F401
 import subprocess
 import time
 from datetime import datetime
-from basedir import basedir
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -38,7 +37,7 @@ class PublisherClient(object):
                 raise e
 
         if manifest:
-            cls.vl_path: str = os.path.join(basedir, "vl.json")
+            cls.vl_path: str = "vl.json"
             cls.vl = VL()
             cls.vl.manifest = manifest
             cls.vl.blob = Blob()

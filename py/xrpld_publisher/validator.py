@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-from basedir import basedir
 import os
 from typing import Dict, Any, List  # noqa: F401
 import subprocess
@@ -17,8 +16,8 @@ class ValidatorClient(object):
 
     def __init__(cls, name: str) -> None:
         cls.name = name
-        cls.keystore_path = os.path.join(basedir, f"keystore")
-        cls.bin_path: str = os.path.join(basedir, "bin/validator-keys")
+        cls.keystore_path = "keystore"
+        cls.bin_path: str = "bin/validator-keys"
         cls.key_path = os.path.join(cls.keystore_path, f"{cls.name}/key.json")
 
     def get_keys(cls):
