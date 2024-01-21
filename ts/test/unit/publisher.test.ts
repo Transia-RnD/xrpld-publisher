@@ -25,7 +25,7 @@ describe('xrpld-publisher - PublisherClient', () => {
       'JAAAAAFxIe3kW20uKHcjYwGFkZ7+Ax8FIorTwvHqmY8kvePtYG4nSHMhAjIn+/pQWK/OU9ln8Rux6wnQGY1yMFeaGR5gEcFSGxa1dkYwRAIgSAGa6gWCa2C9XxIMSoAB1qCZjjJMXGpl5Tb+81U5RDwCIG3GQHXPUjFkTMwEcuM8G6dwcWzEfB1nYa5MqxFAhOXscBJApcamLcUBNxmABeKigy+ZYTYLqMKuGtV9HgjXKA5oI9CNH0xA6R52NchP3rZyXWOWS0tan25o0rwQBNIY78k6Cg=='
     client.addValidator(addManifest)
     expect(client.vl.blob.validators.length).toBe(2)
-    expect(client.vl.blob.validators[1].pk).toBe(
+    expect(client.vl.blob.validators[1].validation_public_key).toBe(
       'EDE45B6D2E287723630185919EFE031F05228AD3C2F1EA998F24BDE3ED606E2748'
     )
     expect(client.vl.blob.validators[1].manifest).toBe(addManifest)
@@ -44,7 +44,7 @@ describe('xrpld-publisher - PublisherClient', () => {
     const addManifest =
       'JAAAAAFxIe3kW20uKHcjYwGFkZ7+Ax8FIorTwvHqmY8kvePtYG4nSHMhAjIn+/pQWK/OU9ln8Rux6wnQGY1yMFeaGR5gEcFSGxa1dkYwRAIgSAGa6gWCa2C9XxIMSoAB1qCZjjJMXGpl5Tb+81U5RDwCIG3GQHXPUjFkTMwEcuM8G6dwcWzEfB1nYa5MqxFAhOXscBJApcamLcUBNxmABeKigy+ZYTYLqMKuGtV9HgjXKA5oI9CNH0xA6R52NchP3rZyXWOWS0tan25o0rwQBNIY78k6Cg=='
     client.addValidator(addManifest)
-    const effective: number = fromDateToEffective('01/01/2022')
+    const effective: number = fromDateToEffective('01/01/2024')
     const expiration: number = fromDaysToExpiration(effective, 30) // Days
     client.signUnl('myvl.json', { effective, expiration })
     expect(client.vl.blob.validators.length).toBe(2)

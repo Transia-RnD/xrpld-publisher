@@ -6,18 +6,18 @@ import json
 from typing import Dict, Any  # noqa: F401
 from datetime import datetime
 import requests
+import time
 
-rippled_ts: int = 946684800
+from xrpl.utils import posix_to_ripple_time
 
 
 def from_date_to_effective(date_str: str):
     effective_ts = datetime.strptime(date_str, "%d/%m/%Y").timestamp()
-    return effective_ts - rippled_ts
+    return posix_to_ripple_time(effective_ts)
 
 
 def from_days_to_expiration(ts: int, days: int):
-    current_time: int = ts - rippled_ts
-    return current_time + (86400 * days)  # expires in x days
+    return ts + 86400 * days  # expires in x days
 
 
 def encode_blob(blob: Dict[str, Any]) -> bytes:

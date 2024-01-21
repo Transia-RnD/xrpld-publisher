@@ -130,7 +130,7 @@ export class PublisherClient {
     const decoded = decode(encoded)
     const publicKey = (decoded.PublicKey as string).toUpperCase()
     const newValidator = {
-      pk: publicKey,
+      validation_public_key: publicKey,
       manifest: manifest,
     }
     this.vl.blob.validators.push(newValidator)
@@ -146,7 +146,6 @@ export class PublisherClient {
     }
 
     const validators = this.vl.blob.validators
-    console.log(validators)
 
     const index = validators.findIndex(
       (validator: any) => validator.validation_public_key === publicKey
@@ -181,19 +180,13 @@ export class PublisherClient {
       expiration = fromDaysToExpiration(Date.now(), 30)
     }
 
-    const validators = this.vl.blob.validators.map((validator: any) => {
-      return {
-        validation_public_key: validator.pk,
-        manifest: validator.manifest,
-      }
-    })
-
     const blob = encodeBlob({
       sequence: this.vl.blob.sequence,
       effective: effective,
       expiration: expiration,
-      validators: validators,
+      validators: this.vl.blob.validators,
     })
+
     const manifest = this.readManifest()
     const keys = this.getKeys()
     const ephKeys = this.getEphKeys()

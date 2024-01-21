@@ -20,6 +20,7 @@ from xrpl.core.addresscodec.codec import _encode, _decode
 from xrpl.core.addresscodec import encode_node_public_key, decode_node_public_key
 from xrpl.core.binarycodec import encode
 from xrpl.core.keypairs import sign as _sign, generate_seed, derive_keypair
+from xrpl.constants import CryptoAlgorithm
 
 DER_PRIVATE_KEY_PREFIX = bytes.fromhex("302E020100300506032B657004220420")
 DER_PUBLIC_KEY_PREFIX = bytes.fromhex("302A300506032B6570032100")
@@ -116,17 +117,16 @@ def generate_keystore() -> KeystoreInterface:
     )
 
 
-def sign(message, secret):
+def sign(message, secret) -> bytes:
     # Convert message to bytes if it's a string
     if isinstance(message, str):
-        message = message.encode("utf-8")
+        message = message.encode("utf-8").upper()
 
     # Try to decode the secret, assuming it's base64 encoded
     try:
         decoded = _decode(secret, bytes([0x20]))
         secret = VALIDATOR_HEX_PREFIX_ED25519 + decoded.hex()
     except Exception as err:
-        print(err)
         # ignore
         pass
 
@@ -229,7 +229,7 @@ class ValidatorClient(object):
 
     def create_token(cls) -> str:
         keys = cls.get_keys()
-        seed = generate_seed()
+        seed = generate_seed(algorithm=CryptoAlgorithm.SECP256K1)
         keypair = derive_keypair(seed)
         keys["token_sequence"] += 1
 
@@ -247,7 +247,7 @@ class ValidatorClient(object):
 
         token = encode_blob(
             {
-                "validation_secret_key": keypair[1],
+                "validation_secret_key": keypair[1][2:],
                 "manifest": manifest["base64"],
             }
         )

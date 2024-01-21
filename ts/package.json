@@ -1,6 +1,6 @@
 {
   "name": "@transia/xrpld-publisher",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Xrpld validator lists publisher library",
   "main": "dist/npm/src/index.js",
   "files": [

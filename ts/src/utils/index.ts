@@ -1,17 +1,16 @@
 import * as fs from 'fs'
 import axios from 'axios'
-
-const rippledTs = 946684800
+import { unixTimeToRippleTime } from 'xrpl'
 
 export function fromDateToEffective(date_str: string): number {
-  const effectiveTs =
-    new Date(date_str.split('/').reverse().join('-')).getTime() / 1000
-  return effectiveTs - rippledTs
+  const effectiveTs = new Date(
+    date_str.split('/').reverse().join('-')
+  ).getTime()
+  return unixTimeToRippleTime(effectiveTs)
 }
 
 export function fromDaysToExpiration(ts: number, days: number): number {
-  const currentTime: number = Math.floor(ts / 1000) - 946684800
-  return currentTime + 86400 * days // expires in x days
+  return ts + 86400 * days // expires in x days
 }
 
 export function convertStringToTimestamp(dateStr: string): number {

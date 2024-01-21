@@ -6,9 +6,13 @@ import logging
 from typing import Dict, Any, List  # noqa: F401
 
 from testing_config import BaseTestConfig
+
+from xrpl.core.addresscodec import decode_node_public_key
+
 from xrpld_publisher.validator import (
     ValidatorClient,
 )
+from xrpld_publisher.utils import decode_blob
 
 logger = logging.getLogger("app")
 

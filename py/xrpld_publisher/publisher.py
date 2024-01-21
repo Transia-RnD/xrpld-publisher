@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from xrpl.core.binarycodec.main import decode
-from xrpl.core.keypairs import generate_seed, derive_keypair
+from xrpl.core.keypairs import is_valid_message, generate_seed, derive_keypair
 from xrpld_publisher.utils import (
     encode_blob,
     read_json,
@@ -130,11 +130,11 @@ class PublisherClient(object):
         public_key: str = decoded["PublicKey"].upper()
         # Check if the validator is already in the list
         for validator in cls.vl.blob.validators:
-            if validator.pk == public_key:
+            if validator.validation_public_key == public_key:
                 raise ValueError("Validator is already in the list")
 
         new_validator: Validator = Validator()
-        new_validator.pk = public_key
+        new_validator.validation_public_key = public_key
         new_validator.manifest = manifest
         cls.vl.blob.validators.append(new_validator)
 
@@ -148,7 +148,7 @@ class PublisherClient(object):
         validators = cls.vl.blob.validators
         # Find the validator with the specified public key
         for validator in validators:
-            if validator.pk == public_key:
+            if validator.validation_public_key == public_key:
                 validators.remove(validator)
                 break
         else:
@@ -167,10 +167,10 @@ class PublisherClient(object):
             effective: int = from_date_to_effective("01/01/2000")
 
         if not expiration:
-            expiration: int = from_days_to_expiration(time.time(), 30)
+            expiration: int = from_days_to_expiration(effective, 30)
 
         validators: List[str] = [
-            {"manfest": v.manifest, "validation_public_key": v.pk}
+            {"validation_public_key": v.validation_public_key, "manifest": v.manifest}
             for v in cls.vl.blob.validators
         ]
 
@@ -187,6 +187,9 @@ class PublisherClient(object):
         keys = cls.get_keys()
         eph_keys = cls.get_ephkeys()
         signature = sign(blob, eph_keys["private_key"])
+        if not is_valid_message(blob, bytes.fromhex(signature), eph_keys["public_key"]):
+            raise ValueError("Invalid UNL Signature")
+
         write_json(
             {
                 "blob": blob.decode("utf-8"),

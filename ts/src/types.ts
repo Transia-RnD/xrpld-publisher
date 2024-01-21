@@ -1,5 +1,5 @@
 export interface Validator {
-  pk: string
+  validation_public_key: string
   manifest: string
 }
 
@@ -27,7 +27,7 @@ export function fromJson(json: any): VL {
       effective: json.blob.effective,
       expiration: json.blob.expiration,
       validators: json.blob.validators.map((v: any) => ({
-        pk: v.validation_public_key,
+        validation_public_key: v.validation_public_key,
         manifest: v.manifest,
       })),
     },
@@ -46,7 +46,7 @@ export function toJson(vl: VL): any {
       effective: vl.blob.effective,
       expiration: vl.blob.expiration,
       validators: vl.blob.validators.map((v: Validator) => ({
-        validation_public_key: v.pk,
+        validation_public_key: v.validation_public_key,
         manifest: v.manifest,
       })),
     },

@@ -7,7 +7,7 @@ from xrpld_publisher.utils import decode_blob, encode_blob
 
 
 class Validator(object):
-    pk: str = None
+    validation_public_key: str = None
     manifest: str = None
 
     def __init__(self) -> None:
@@ -16,13 +16,13 @@ class Validator(object):
     @staticmethod
     def from_json(json: Dict[str, Any]):
         self = Validator()
-        self.pk = json["validation_public_key"]
+        self.validation_public_key = json["validation_public_key"]
         self.manifest = json["manifest"]
         return self
 
     def to_dict(self):
         return {
-            "validation_public_key": self.pk,
+            "validation_public_key": self.validation_public_key,
             "manifest": self.manifest,
         }
 
