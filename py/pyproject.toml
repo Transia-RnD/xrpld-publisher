@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "xrpld-publisher"
-version = "2.0.1"
+version = "2.0.2"
 description = "Xrpld validator lists publisher library"
 authors = ["Denis Angell <dangell@transia.co>"]
 

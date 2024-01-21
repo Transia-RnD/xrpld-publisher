@@ -12,7 +12,7 @@ from xrpl.utils import posix_to_ripple_time
 
 
 def from_date_to_effective(date_str: str):
-    effective_ts = datetime.strptime(date_str, "%d/%m/%Y").timestamp()
+    effective_ts = datetime.strptime(date_str, "%m/%d/%Y").timestamp()
     return posix_to_ripple_time(effective_ts)
 
 

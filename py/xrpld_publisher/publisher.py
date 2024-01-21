@@ -83,8 +83,8 @@ class PublisherClient(object):
         eph_keypair = derive_keypair(eph_seed)
         write_json(
             {
-                "public_key": eph_keypair[0],
-                "private_key": eph_keypair[1],
+                "publicKey": eph_keypair[0],
+                "privateKey": eph_keypair[1],
             },
             cls.eph_path,
         )
@@ -95,8 +95,8 @@ class PublisherClient(object):
 
         write_json(
             {
-                "public_key": keypair[0],
-                "private_key": keypair[1],
+                "publicKey": keypair[0],
+                "privateKey": keypair[1],
             },
             cls.key_path,
         )
@@ -164,7 +164,7 @@ class PublisherClient(object):
             raise ValueError("must have at least 1 validator")
 
         if not effective:
-            effective: int = from_date_to_effective("01/01/2000")
+            effective: int = from_date_to_effective(datetime.now().strftime("%m/%d/%Y"))
 
         if not expiration:
             expiration: int = from_days_to_expiration(effective, 30)
@@ -186,8 +186,10 @@ class PublisherClient(object):
         manifest = cls.read_manifest()
         keys = cls.get_keys()
         eph_keys = cls.get_ephkeys()
-        signature = sign(blob, eph_keys["private_key"])
-        if not is_valid_message(blob, bytes.fromhex(signature), eph_keys["public_key"]):
+        signature = sign(base64.b64decode(blob), eph_keys["privateKey"])
+        if not is_valid_message(
+            base64.b64decode(blob), bytes.fromhex(signature), eph_keys["publicKey"]
+        ):
             raise ValueError("Invalid UNL Signature")
 
         write_json(
@@ -195,7 +197,7 @@ class PublisherClient(object):
                 "blob": blob.decode("utf-8"),
                 "manifest": manifest,
                 "signature": signature,
-                "public_key": keys["public_key"],
+                "public_key": keys["publicKey"],
                 "version": 1,
             },
             path,

@@ -49,4 +49,13 @@ describe('xrpld-publisher - PublisherClient', () => {
     client.signUnl('myvl.json', { effective, expiration })
     expect(client.vl.blob.validators.length).toBe(2)
   })
+  it('sign vl - no effective or expiration', async () => {
+    const client = new PublisherClient(vlPath)
+    expect(client.vl.blob.sequence).toBe(2)
+    const addManifest =
+      'JAAAAAFxIe3kW20uKHcjYwGFkZ7+Ax8FIorTwvHqmY8kvePtYG4nSHMhAjIn+/pQWK/OU9ln8Rux6wnQGY1yMFeaGR5gEcFSGxa1dkYwRAIgSAGa6gWCa2C9XxIMSoAB1qCZjjJMXGpl5Tb+81U5RDwCIG3GQHXPUjFkTMwEcuM8G6dwcWzEfB1nYa5MqxFAhOXscBJApcamLcUBNxmABeKigy+ZYTYLqMKuGtV9HgjXKA5oI9CNH0xA6R52NchP3rZyXWOWS0tan25o0rwQBNIY78k6Cg=='
+    client.addValidator(addManifest)
+    client.signUnl('myvl.json')
+    expect(client.vl.blob.validators.length).toBe(2)
+  })
 })

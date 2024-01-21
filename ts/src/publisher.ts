@@ -14,7 +14,7 @@ import {
 import { VL, Blob } from './types'
 import { decode } from 'xrpl'
 import { generateManifest, sign } from './validator'
-import { generateSeed, deriveKeypair } from 'ripple-keypairs'
+import { generateSeed, deriveKeypair, verify } from 'ripple-keypairs'
 
 export class PublisherClient {
   binPath: string
@@ -173,11 +173,16 @@ export class PublisherClient {
     }
 
     if (!effective) {
-      effective = fromDateToEffective('01/01/2000')
+      const today = new Date()
+      const day = String(today.getDate()).padStart(2, '0')
+      const month = String(today.getMonth() + 1).padStart(2, '0') // January is 0!
+      const year = today.getFullYear()
+      const formattedDate = `${month}/${day}/${year}`
+      effective = fromDateToEffective(formattedDate)
     }
 
     if (!expiration) {
-      expiration = fromDaysToExpiration(Date.now(), 30)
+      expiration = fromDaysToExpiration(effective, 30)
     }
 
     const blob = encodeBlob({
@@ -191,6 +196,15 @@ export class PublisherClient {
     const keys = this.getKeys()
     const ephKeys = this.getEphKeys()
     const signature = sign(Buffer.from(blob, 'base64'), ephKeys.privateKey)
+    if (
+      !verify(
+        Buffer.from(blob, 'base64').toString('hex'),
+        signature,
+        ephKeys.publicKey
+      )
+    ) {
+      throw Error('Invalid UNL Signature')
+    }
     await fsPromises.writeFile(
       path,
       JSON.stringify(

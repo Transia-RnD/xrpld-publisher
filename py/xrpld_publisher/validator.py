@@ -120,7 +120,7 @@ def generate_keystore() -> KeystoreInterface:
 def sign(message, secret) -> bytes:
     # Convert message to bytes if it's a string
     if isinstance(message, str):
-        message = message.encode("utf-8").upper()
+        message = message.encode("utf-8")
 
     # Try to decode the secret, assuming it's base64 encoded
     try:
