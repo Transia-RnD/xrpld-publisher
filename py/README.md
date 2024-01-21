@@ -12,44 +12,6 @@ pip install xrpld-publisher
 
 ## Usage
 
-### Download the binary builds
-
-First we need to download the binary builds for both the `validators-list` and `validator-keys`.
-
-Download the build folder that corresponds to your operating system from [releases].(https://github.com/Transia-RnD/xrpld-publisher/releases)
-
-> If you don't see your operating system you will need to build them yourself for [source](https://github.com/Transia-RnD/validator-list). You can use this [guide](https://github.com/Transia-RnD/validator-list/blob/main/doc/validator-list-guide.md)
-
-Save them into the root of your project under the `bin` directory.
-
-### Generate Publisher List Keys
-
-When first setting up a validator list, use the `validator-list` tool to
-generate the publisher key pair:
-
-```
-  $ ./bin/validator-list wizard
-```
-
-1. Enter `1` for `Create validator list publisher keys`
-2. Enter a name for the keys.
-
-Sample output:
-```
-  Select a name for this credential set: keystore
-
-  Publisher keys stored in privkeys.txt and pubkeys.txt
-  Ephemeral keys stored in keystore/
-```
-
-Keep the key files in a secure but recoverable location, such as an encrypted
-USB flash drive. Do not modify its contents.
-
-Use ephkey1.txt key and manifest to generates validator lists.
-
-* Add the hex-encoded public key from your [pubkeys.txt file](#validator-list-publisher-keys) to `[validator_list_keys]`
-
-
 ### Validator Client
 
 The `ValidatorClient` class provides methods for managing validator keys and generating VL manifests.
@@ -66,13 +28,13 @@ keys = client.create_keys()
 # Set the domain for the validator
 client.set_domain("example.com")
 
-# Generate a token for the validator
+# Generate a token for the validator (Also creates manifest)
 token = client.create_token()
 
-# Generate a VL manifest for the validator
-manifest = client.create_manifest()
+# Read the token
+manifest = client.read_manifest()
 
-# Read the VL manifest
+# Read the manifest
 manifest = client.read_manifest()
 ```
 
@@ -86,7 +48,8 @@ The `PublisherClient` class provides methods for managing and publishing VLs.
 from xrpld_publisher.publisher import PublisherClient
 
 # Create a new instance of the PublisherClient
-client = PublisherClient(manifest="manifest")
+client = PublisherClient()
+client.create_keys()
 
 # Create an existing instance of the PublisherClient
 client = PublisherClient(vl_path="my/dir/vl.json")
@@ -100,7 +63,7 @@ client.remove_validator("public_key")
 # Sign the VL with a private key and generate a signed VL
 effective: int = from_date_to_effective("01/01/2022")
 expiration: int = from_days_to_expiration(time.time(), 30)
-signed_vl = client.sign_unl("private_key", "myvl.json", effective=effective, expiration=expiration)
+signed_vl = client.sign_unl("myvl.json", effective=effective, expiration=expiration)
 ```
 
 The VL file is stored in the `vl_path` directory.

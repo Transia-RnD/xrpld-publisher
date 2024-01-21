@@ -12,43 +12,6 @@ yarn add @transia/xrpld-publisher
 
 ## Usage
 
-### Download the binary builds
-
-First we need to download the binary builds for both the `validators-list` and `validator-keys`.
-
-Download the build folder that corresponds to your operating system from [releases].(https://github.com/Transia-RnD/xrpld-publisher/releases)
-
-> If you don't see your operating system you will need to build them yourself for [source](https://github.com/Transia-RnD/validator-list). You can use this [guide](https://github.com/Transia-RnD/validator-list/blob/main/doc/validator-list-guide.md)
-
-Save them into the root of your project under the `bin` directory.
-
-### Generate Publisher List Keys
-
-When first setting up a validator list, use the `validator-list` tool to
-generate the publisher key pair:
-
-```
-  $ ./bin/validator-list wizard
-```
-
-1. Enter `1` for `Create validator list publisher keys`
-2. Enter a name for the keys.
-
-Sample output:
-```
-  Select a name for this credential set: keystore
-
-  Publisher keys stored in privkeys.txt and pubkeys.txt
-  Ephemeral keys stored in keystore/
-```
-
-Keep the key files in a secure but recoverable location, such as an encrypted
-USB flash drive. Do not modify its contents.
-
-Use ephkey1.txt key and manifest to generates validator lists.
-
-* Add the hex-encoded public key from your [pubkeys.txt file](#validator-list-publisher-keys) to `[validator_list_keys]`
-
 ### Validator Client
 
 The `ValidatorClient` class provides methods for managing validator keys and generating VL manifests.
@@ -68,10 +31,10 @@ client.setDomain("example.com")
 // Generate a token for the validator
 client.createToken()
 
-// Generate a VL manifest for the validator
-client.createManifest()
+// Read the token
+const manifest = client.readToken()
 
-// Read the VL manifest
+// Read the manifest
 const manifest = client.readManifest()
 ```
 
@@ -85,7 +48,8 @@ The `PublisherClient` class provides methods for managing and publishing VLs.
 import { PublisherClient } from '@transia/xrpld-publisher'
 
 // Create a new instance of the PublisherClient
-const client = PublisherClient(manifest="manifest")
+const client = PublisherClient()
+client.createKeys()
 
 // Create an existing instance of the PublisherClient
 const client = PublisherClient(vl_path="my/dir/vl.json")
@@ -99,7 +63,7 @@ client.removeValidator("public_key")
 // Sign the VL with a private key and generate a signed VL
 const effective: number = fromDateToEffective("01/01/2022")
 const expiration: number = fromDaysToExpiration(effective, 30) // Days
-client.signUnl("private_key", "myvl.json", { effective, expiration })
+client.signUnl("myvl.json", { effective, expiration })
 ```
 
 The VL file is stored in the `vl_path` directory.
