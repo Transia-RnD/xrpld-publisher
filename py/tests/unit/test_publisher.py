@@ -15,9 +15,6 @@ logger = logging.getLogger("app")
 
 
 class TestPublisher(BaseTestConfig):
-    name: str = "test"
-    pk: str = "CC9E8B118E8E927DA82A66B9D931E1AB6309BA32F057F8B216600B347C552006"
-    manifest: str = "JAAAAAFxIe101ANsZZGkvfnFTO+jm5lqXc5fhtEf2hh0SBzp1aHNwXMh7TN9+b62cZqTngaFYU5tbGpYHC8oYuI3G3vwj9OW2Z9gdkAnUjfY5zOEkhq31tU4338jcyUpVA5/VTsANFce7unDo+JeVoEhfuOb/Y8WA3Diu9XzuOD4U/ikfgf9SZOlOGcBcBJAw44PLjH+HUtEnwX45lIRmo0x5aINFMvZsBpE9QteSDBXKwYzLdnSW4e1bs21o+IILJIiIKU/+1Uxx0FRpQbMDA=="
     vl_path: str = "tests/fixtures/test.json"
 
     def test_init(cls):
@@ -27,7 +24,8 @@ class TestPublisher(BaseTestConfig):
         cls.assertEqual(len(client.vl.blob.validators), 1)
 
     def test_init_new_vl(cls):
-        client: PublisherClient = PublisherClient(manifest=cls.manifest)
+        client: PublisherClient = PublisherClient()
+        client.create_keys()
         cls.assertIsNotNone(client.vl)
         cls.assertEqual(client.vl.blob.sequence, 1)
         cls.assertEqual(len(client.vl.blob.validators), 0)
@@ -62,5 +60,5 @@ class TestPublisher(BaseTestConfig):
         add_manifest: str = "JAAAAAFxIe3kW20uKHcjYwGFkZ7+Ax8FIorTwvHqmY8kvePtYG4nSHMhAjIn+/pQWK/OU9ln8Rux6wnQGY1yMFeaGR5gEcFSGxa1dkYwRAIgSAGa6gWCa2C9XxIMSoAB1qCZjjJMXGpl5Tb+81U5RDwCIG3GQHXPUjFkTMwEcuM8G6dwcWzEfB1nYa5MqxFAhOXscBJApcamLcUBNxmABeKigy+ZYTYLqMKuGtV9HgjXKA5oI9CNH0xA6R52NchP3rZyXWOWS0tan25o0rwQBNIY78k6Cg=="
         client.add_validator(add_manifest)
         expiration: int = from_days_to_expiration(int(time.time()), 30)
-        client.sign_unl(cls.pk, expiration=expiration)
+        client.sign_unl("myvl.json", expiration=expiration)
         cls.assertEqual(len(client.vl.blob.validators), 2)

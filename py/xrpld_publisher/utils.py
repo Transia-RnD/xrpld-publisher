@@ -51,6 +51,15 @@ def read_file(path: str) -> str:
         return f.read()
 
 
+def write_file(data: str, path: str):
+    """
+    Writes str to file path
+    :return:
+    """
+    with open(path, "w") as file:
+        file.write(data)
+
+
 def read_json(path: str) -> Dict[str, object]:
     """Read Json
 
@@ -76,7 +85,7 @@ def write_json(data: Dict[str, object], path: str):
     :rtype: None
     """
     with open(path, "w") as json_file:
-        json.dump(data, json_file)
+        json.dump(data, json_file, indent=4, sort_keys=True)
     return True
 
 
