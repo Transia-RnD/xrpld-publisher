@@ -3,9 +3,7 @@ import axios from 'axios'
 import { unixTimeToRippleTime } from 'xrpl'
 
 export function fromDateToEffective(date_str: string): number {
-  const effectiveTs = new Date(
-    date_str.split('/').reverse().join('-')
-  ).getTime()
+  const effectiveTs = new Date(date_str).getTime()
   return unixTimeToRippleTime(effectiveTs)
 }
 
@@ -19,7 +17,9 @@ export function convertStringToTimestamp(dateStr: string): number {
 }
 
 export function encodeBlob(blob: object): string {
-  return Buffer.from(JSON.stringify(blob)).toString('base64')
+  const compactJson = JSON.stringify(blob)
+  const pythonStyleJson = compactJson.replace(/:/g, ': ').replace(/,/g, ', ')
+  return Buffer.from(pythonStyleJson, 'utf-8').toString('base64')
 }
 
 export function decodeBlob(blob: string): object {

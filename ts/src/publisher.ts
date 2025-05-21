@@ -74,9 +74,14 @@ export class PublisherClient {
   }
 
   readManifest(): string {
-    const manifestPath = path.join(this.keystorePath, `vl/manifest.txt`)
-    const manifest = readTxt(manifestPath)
-    return manifest[0]
+    try {
+      const manifestPath = path.join(this.keystorePath, `vl/manifest.txt`)
+      const manifest = readTxt(manifestPath)
+      return manifest[0]
+    } catch (e) {
+      // console.log(e)
+      return null
+    }
   }
 
   async createKeys(): Promise<void> {
@@ -211,12 +216,12 @@ export class PublisherClient {
         {
           blob: blob,
           manifest,
-          signature,
           public_key: keys.publicKey,
+          signature,
           version: 1,
         },
         null,
-        2
+        4
       )
     )
   }

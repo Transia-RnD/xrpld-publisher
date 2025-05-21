@@ -1,14 +1,16 @@
 import { ValidatorClient } from '../../dist/npm/src'
+import path from 'path'
 
 describe('xrpld-publisher - Validator', () => {
   it('init validator', async () => {
     const client = new ValidatorClient('test-v')
-    expect(client.keystorePath).toBe(
-      '/Users/denisangell/projects/xrpl-labs/xrpld-publisher/ts/keystore'
+    const expectedKeystorePath = path.resolve(__dirname, '../../keystore')
+    const expectedKeyPath = path.resolve(
+      expectedKeystorePath,
+      'test-v/key.json'
     )
-    expect(client.keyPath).toBe(
-      '/Users/denisangell/projects/xrpl-labs/xrpld-publisher/ts/keystore/test-v/key.json'
-    )
+    expect(client.keystorePath).toBe(expectedKeystorePath)
+    expect(client.keyPath).toBe(expectedKeyPath)
   })
   it('get keys', async () => {
     const client = new ValidatorClient('test-v-get')

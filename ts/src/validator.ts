@@ -112,17 +112,16 @@ export function generateManifest(
   // MasterSignature (soeREQUIRED)
   const masterSignature = sign(verifyData, manifest.MasterPrivateKey)
 
-  const manifestBuffer = Buffer.from(
-    encode({
-      Sequence: manifest.Sequence,
-      PublicKey: manifest.PublicKey,
-      SigningPubKey: manifest.SigningPubKey,
-      Signature: ephemeralSignature,
-      Domain: manifest.Domain,
-      MasterSignature: masterSignature,
-    }),
-    'hex'
-  )
+  const jsonManifest = {
+    Sequence: manifest.Sequence,
+    PublicKey: manifest.PublicKey,
+    SigningPubKey: manifest.SigningPubKey,
+    Signature: ephemeralSignature,
+    Domain: manifest.Domain,
+    MasterSignature: masterSignature,
+  }
+
+  const manifestBuffer = Buffer.from(encode(jsonManifest), 'hex')
   return {
     base64: manifestBuffer.toString('base64'),
     xrpl: manifestBuffer.toString('hex').toUpperCase(),
@@ -172,9 +171,10 @@ export class ValidatorClient {
     if (!fs.existsSync(keyPathDir)) {
       await fsPromises.mkdir(keyPathDir, { recursive: true })
     }
+    const keystore = generateKeystore()
     await fsPromises.writeFile(
       this.keyPath,
-      JSON.stringify(generateKeystore(), null, 2)
+      JSON.stringify(keystore, Object.keys(keystore).sort(), 4)
     )
   }
 
@@ -188,17 +188,23 @@ export class ValidatorClient {
     )
     const namePath = path.join(this.keystorePath, this.name)
     await fsPromises.writeFile(`${namePath}/attestation.txt`, attestation)
-    await fsPromises.writeFile(this.keyPath, JSON.stringify(keys, null, 2))
+    await fsPromises.writeFile(
+      this.keyPath,
+      JSON.stringify(keys, Object.keys(keys).sort(), 4)
+    )
   }
 
   async createToken(): Promise<void> {
     const keys = { ...this.getKeys() }
-    const seed = generateSeed({ algorithm: 'ed25519' })
+    const seed = generateSeed({ algorithm: 'ecdsa-secp256k1' })
     const keypair = deriveKeypair(seed)
+
+    console.log(Buffer.from(keys.domain, 'utf-8').toString('hex'))
+
     keys.token_sequence += 1
     const manifest = generateManifest({
       Sequence: keys.token_sequence,
-      Domain: keys.domain,
+      Domain: Buffer.from(keys.domain, 'utf-8').toString('hex'),
       PublicKey: decodeNodePublic(keys.public_key)
         .toString('hex')
         .toUpperCase(),
@@ -209,14 +215,17 @@ export class ValidatorClient {
     keys.manifest = manifest.xrpl
 
     const token = encodeBlob({
-      validation_secret_key: keypair.privateKey,
+      validation_secret_key: keypair.privateKey.slice(2, 66),
       manifest: manifest.base64,
     })
 
     const namePath = path.join(this.keystorePath, this.name)
     await fsPromises.writeFile(`${namePath}/manifest.txt`, manifest.base64)
     await fsPromises.writeFile(`${namePath}/token.txt`, token)
-    await fsPromises.writeFile(this.keyPath, JSON.stringify(keys, null, 2))
+    await fsPromises.writeFile(
+      this.keyPath,
+      JSON.stringify(keys, Object.keys(keys).sort(), 4)
+    )
   }
 
   readToken(): string {
